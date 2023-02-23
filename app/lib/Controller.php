@@ -22,7 +22,7 @@ abstract class Controller{
 			require_once("../app/views/". $viewName. ".php");
 		}
 		else {
-			die("La vista no existe");
+			die("View does not exist");
 		}
 	}
 }

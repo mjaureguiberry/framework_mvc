@@ -1,8 +1,8 @@
 <?php
 /*
 starter.php
-- Includes controllers, models, views, libraries and helpers 
-- Can be called by index.php
+- Includes files needed to start the web page
+- Should be called by public/index.php
 */
 
 // Load config file

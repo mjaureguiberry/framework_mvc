@@ -1,8 +1,8 @@
 <?php
 /*
 Core.php
-- base functions 
--- get method and paremeters from URL
+- Base class for the application
+- Get method and paremeters from URL
 */
 
 

@@ -1,6 +1,7 @@
 <?php
 /*
 index.php
+- Default web page
 */
 
 error_reporting(E_ALL);
