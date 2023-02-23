@@ -2,7 +2,8 @@
 
 /*
 Database.php
-Connection to MySQL Database using mysqli object
+- Connection to MySQL Database using mysqli object
+- You should create one child class of Database per DB table
 */
 
 class Database{
@@ -21,51 +22,47 @@ class Database{
 
 	public function __construct() {
 		// Attempt connection to Database
-		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		try {
 			$this->dbh = new mysqli($this->host, $this->user, $this->pass, $this->dbname);
 			$this->dbh->set_charset("utf8mb4");
 		} catch(Exception $e) {
 			$this->error = $e->getMessage();
 			if ($this->debug & 0x01) echo "<pre>" , print_r($this->error) , "</pre>";
-			exit('Error connecting to database'); //Should be a message a typical user could understand
+			exit("Error connecting to database"); //Should be a message a typical user could understand
 		}
 	}
 
-	public function query($sql) {
+	public function prepareQuery($sql) {
 		// Prepare SQL statement
-		$this->stmt = mysqli_prepare($this->dbh, $sql);
+		$this->stmt = $this->dbh->prepare($sql);
 	}
 
-	public function bindParam($param, $datatype) {
-		// Bind one parameter to SQL query
-		$this->stmt->bind_param($datatype, $param);
+	public function bindParams($datatypes, ...$params) {
+		// Bind parameter(s) to SQL query
+		$this->stmt->bind_param($datatypes, ...$params);
 	}
 
-	public function execute() {
-		// Execute SQL statement
+	public function executeQuery() {
+		// Execute SQL statement and get result
 		$this->stmt->execute();
-	}
-
-	public function resultSet() {
-		// Get result set and process result
-		$this->execute();
 		$this->result = $this->stmt->get_result();
 	}
 
 	public function getRows() {
-		// Get all rows
-		$this->resultSet();
+		// Get all rows (we assume $this->executeQuery() was called before)
 		$rows = $this->result->fetch_all(MYSQLI_ASSOC);
 		if ($this->debug & 0x02) echo "<pre>" , print_r($rows) , "</pre>";
 		return $rows;
 	}
 
 	public function getRowCount() {
-		// Get row count
-		$this->resultSet();
+		// Get row count (we assume $this->executeQuery() was called before)
 		return $this->result->num_rows();
 	}
+
+	public function closeConnection() {
+        $this->dbh->close();
+    }
 }
 
 ?>
