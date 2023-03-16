@@ -57,7 +57,7 @@ class Database{
 
 	public function getRowCount() {
 		// Get row count (we assume $this->executeQuery() was called before)
-		return $this->result->num_rows();
+		return $this->result->num_rows;
 	}
 
 	public function closeConnection() {
